@@ -5,13 +5,10 @@ const flash=require('connect-flash');
 const session=require('express-session');
 const passport=require('passport');
 
-//for file upload
-// const multer = require("multer");
-
 const app=express();
 
 //passport config
-require('./config/passport')(passport);
+require('./config/sso')(passport);
 
 //DB config
 const db=require('./config/keys').MongoURI;
@@ -52,12 +49,12 @@ app.use((req,res,next) => {
 });
 
 //Routes
-app.use('/',require('./controllers/index'));
-app.use('/users',require('./controllers/users'));
+app.use('/',require('./controllers/dashboard'));
+app.use('/users',require('./controllers/file-users'));
 app.use('/upload',require('./controllers/file-upload'));
 app.use('/delete',require('./controllers/file-delete'));
 app.use('/edit',require('./controllers/file-edit'));
 
-const PORT = process.env.PORT || 8081;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT,console.log(`Server has started`));

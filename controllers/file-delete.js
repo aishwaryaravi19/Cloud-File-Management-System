@@ -2,17 +2,17 @@ const express = require('express');
 const router = express.Router();
 const AWS = require("aws-sdk");
 const keys = require("../config/keys");
-const Files = require('../models/files');
+const Files = require('../domains/files');
 
 router.post('/', (req, res) => {
 
-    var fileUrl;
+    var cloudFrontFileUrl;
     for(var myKey in req.body) {
-        fileUrl=myKey;
+        cloudFrontFileUrl=myKey;
      }
-    var fileName = fileUrl.split('/')[3];
+    var fileName = cloudFrontFileUrl.split('/')[3];
 
-    let s3bucket = new AWS.S3({
+    let s3BucketCredentials = new AWS.S3({
         accessKeyId: keys.AwsAccessKeyId,
         secretAccessKey: keys.AwsSecretAccessKey,
         region: keys.region
@@ -29,7 +29,7 @@ router.post('/', (req, res) => {
           }
     };
 
-    s3bucket.deleteObjects(params, function(err, data) {
+    s3BucketCredentials.deleteObjects(params, function(err, data) {
         if (err) {
             res.status(500).json({error: true, Message: err});
         }
@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
             req.flash('success_msg','File Deleted!');
             res.redirect('/dashboard');
 
-            Files.deleteOne({ fileUrl: fileUrl }, function (err) {
+            Files.deleteOne({ fileUrl: cloudFrontFileUrl }, function (err) {
                 if (err) {
                     return err;
                 }

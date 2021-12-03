@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const AWS = require("aws-sdk");
 const keys = require("../config/keys");
-const Files = require('../models/files');
+const Files = require('../domains/files');
 
 router.post('/', (req, res) => {
 
@@ -12,7 +12,7 @@ router.post('/', (req, res) => {
      }
     var fileName = fileUrl.split('/')[3];
 
-    let s3bucket = new AWS.S3({
+    let s3BucketCredentials = new AWS.S3({
         accessKeyId: keys.AwsAccessKeyId,
         secretAccessKey: keys.AwsSecretAccessKey,
         region: keys.region
@@ -29,7 +29,7 @@ router.post('/', (req, res) => {
           }
     };
 
-    s3bucket.putObject(params, function(err, data) {
+    s3BucketCredentials.putObject(params, function(err, data) {
         if (err) {
             res.status(500).json({error: true, Message: err});
         }
