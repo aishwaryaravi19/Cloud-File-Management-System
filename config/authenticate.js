@@ -4,7 +4,7 @@ module.exports = {
             return next();
         }
 
-        req.flash('error_msg','Please login to view this resource');
+        req.flash('error_msg','Please login to the portal to access this resource');
         res.redirect('./users/login');
     }
 }

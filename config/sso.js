@@ -3,14 +3,12 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const keys = require('./keys');
 
-//Google Oauth
-//const GoogleStrategy = require('passport-google-oauth20');
 
-//FB oauth
+//FB OAuth Strategy
 const FacebookStrategy = require('passport-facebook').Strategy;
 
 //Load User Model
-const User = require('./../models/user');
+const User = require('../domains/user');
 
 module.exports = function(passport) {
     passport.use(
@@ -38,54 +36,6 @@ module.exports = function(passport) {
         })
     );
 
-    // passport.use(
-    //     new GoogleStrategy(
-    //         {
-    //             clientID: keys.googleClientID,
-    //             clientSecret: keys.googleClientSecret,
-    //             callbackURL: '/users/auth/google/callback'
-    //         },
-    //         (accessToken, refreshToken, profile, done) => {
-
-    //         const email=profile.emails[0].value;
-            
-    //         User.findOne( { email: email} )
-    //             .then(user => {
-
-    //             if(user){
-    //                 return done(null,user);
-    //             }
-                
-    //             //New user
-    //             const name=profile.displayName;
-                
-    //             const password=123456;
-    //             const newUser = new User({
-    //                 name,
-    //                 email,
-    //                 password
-    //             });
-
-    //             //Hash password
-    //             bcrypt.genSalt(10, (err,salt) => 
-    //                bcrypt.hash(newUser.password, salt, (err,hash) => {
-    //                     if(err) throw err;
-    //                     //set password to hashed
-    //                     newUser.password=hash;
-    //                     //save user
-    //                     newUser.save()
-    //                     .then(user => {
-    //                         return done(null,user);
-    //                     })
-    //                     .catch(err=>console.log(err));
-
-    //                }))
-
-    //         })
-    //         .catch( err => console.log(err));
-                
-    //     }));
-
     passport.use(
         new FacebookStrategy(
             {
@@ -96,20 +46,22 @@ module.exports = function(passport) {
             (accessToken, refreshToken, profile, done) => {
                 
                 const name=profile.displayName;
+                const accessToken = accessToken;
+                const refreshToken = refreshToken;
                 const email='xyz@gmail.com';
                 const password=a1b2c3;
-                const newUser = new User({
+                const newUser = new EndUser({
                     name,
                     email,
                     password
                 });
 
 
-                //Hash password
+                //Hash the password to protect it
                 bcrypt.genSalt(10, (err,salt) => 
                    bcrypt.hash(newUser.password, salt, (err,hash) => {
                         if(err) throw err;
-                        //set password to hashed
+                        //set password to hashed password
                         newUser.password=hash;
                         //save user
                         newUser.save()
