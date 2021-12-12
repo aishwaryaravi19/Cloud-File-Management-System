@@ -1,0 +1,123 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Dashboard</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+              <a class="nav-link" href="#">Welcome <%=user.name %> <span class="sr-only">(current)</span></a>
+          </li>
+      </ul>
+    <span class="navbar-text">
+      <a href="/users/logout" >Logout</a>
+    </span>
+  </div>
+</nav>
+<br/><br/>
+<% include ./messages/alert-messages %>
+<br />
+<%= typeof msg != 'undefined' ? msg : '' %>
+<form action="/upload" method="POST" enctype="multipart/form-data">
+    <div class="file-field input-field">
+      <div class="btn green">
+        <span>File</span>
+        <input name="myImage" type="file">
+      </div>
+      <input type="hidden" name=user value=<%=user.name %>>
+      <div class="file-path-wrapper">
+        <input class="file-path validate" type="text">
+      </div>
+    </div>
+    <button type="submit" class="btn">Upload</button>
+  </form>
+  <br/><br/>
+  <br/><br/> 
+  <h4><u>File Details</u></h4>
+  <table>
+    <thead>
+      <tr>
+          <th>User Name</th>
+          <th>File Name</th>
+          <th>Upload Time</th>
+          <th>Download File</th>
+          <th>Edit File</th>
+          <th>Delete File</th>
+      </tr>
+    </thead>
+    <% var cf = 'http://d3i9r2ifyy8coc.cloudfront.net/'%>
+    <tbody>
+        <% data.forEach(function (data) { %>
+          <form action="/delete" method="POST">
+          <tr name='row'>
+                  <td name='user'><%= data.user %></td>
+                  <td name='fileName'><%= data.fileName %></td>
+                  <td name='uploadTime'><%= data.uploadTime %></td>
+                  <td name='fileUrl'><a href='<%=cf + data.cloudfrontKey %>'><%= data.fileUrl %></a></td>
+                  <td><button class='btn' name='<%= data.fileUrl %>' data-toggle="modal" data-target="#exampleModalCenter">Edit</button></td>
+                  <td><button class='btn' name=<%= data.fileUrl %>>Delete</button></td>
+            </tr>
+          </form>
+
+      <% }) %>
+      
+    </tbody>
+  </table>
+
+  <br/><br/>
+  <br/><br/> 
+  <%if (logins.length > 0) { %>
+    <h4><u>User Details</u></h4>
+  <table>
+      <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Email</th>
+        </tr>
+      </thead>
+
+      <tbody>
+          <% logins.forEach(function (logins) { %>
+            <tr>
+                <td><%=logins.name %></td>
+                <td><%=logins.email %></td>
+            </tr>
+        <% }) %>
+        
+      </tbody>
+    </table>
+
+    <br/><br/>
+  <br/><br/> 
+    <% } %>
+    <!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Edit File</h5>
+        <button type="button" style="margin-right: 3px;" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/upload" method="POST" enctype="multipart/form-data">
+        <div class="file-field input-field">
+          <div class="btn green">
+            <span>File</span>
+            <input name="myImage" type="file">
+          </div>
+          <input type="hidden" name=user value=<%=user.name %>>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+          </div>
+        </div>
+        <button type="submit" class="btn">Update</button>
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" style="margin-right: 3px;"  class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick = "callApi()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
