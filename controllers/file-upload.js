@@ -3,7 +3,7 @@ const router = express.Router();
 const AWS = require("aws-sdk");
 const multer = require("multer");
 const keys = require("../config/keys");
-const Files = require('../domains/files');
+const Files = require('../models/file');
 
  const storage = multer.memoryStorage();
  const upload = multer({storage: storage, limits: {fileSize: 10 * 1024 * 1024}}).single('myImage');

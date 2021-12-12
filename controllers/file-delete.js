@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const AWS = require("aws-sdk");
 const keys = require("../config/keys");
-const Files = require('../domains/files');
+const Files = require('../models/file');
 
 router.post('/', (req, res) => {
 

@@ -5,6 +5,6 @@ module.exports = {
         }
 
         req.flash('error_msg','Please login to the portal to access this resource');
-        res.redirect('./users/login');
+        res.redirect('./users/signin');
     }
 }

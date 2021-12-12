@@ -3,11 +3,11 @@ const router=express.Router();
 const { ensureAuthenticated }= require('../config/authenticate');
 
 //to get data from tables
-const Files = require('../domains/files');
-const User = require('../domains/endusers');
+const Files = require('../models/file');
+const User = require('../models/enduser');
 
 //Welcome Page
-router.get('/',(req,res)=>res.render('welcome'));
+router.get('/',(req,res)=>res.render('home'));
 
 //dahsboard Page
 router.get('/dashboard',ensureAuthenticated,(req,res)=>{
@@ -17,7 +17,7 @@ router.get('/dashboard',ensureAuthenticated,(req,res)=>{
     if(req.user.name != 'admin'){
 
         Files.find({ email : req.user.email },(err, data) => {;
-            res.render('dashboard',{
+            res.render('admin-dashboard',{
                 user: user,
                 data: data,
                 logins: {}
@@ -27,7 +27,7 @@ router.get('/dashboard',ensureAuthenticated,(req,res)=>{
     else{
         User.find({ level: { $ne: 'A' }},(err, output) => {
             Files.find({},(err, data) => {
-                res.render('dashboard',{
+                res.render('admin-dashboard',{
                     user: user,
                     data: data,
                     logins: output

@@ -4,10 +4,10 @@ const bcrypt=require('bcryptjs');
 const passport=require('passport');
 
 //User Model
-const User = require('../domains/endusers');
+const User = require('../models/enduser');
 
 //Register Handle
-router.post('/register', (req,res)=>{
+router.post('/signup', (req,res)=>{
     const { name, email, password, confirmpassword} = req.body;
     let errors = [];
 
@@ -22,7 +22,7 @@ router.post('/register', (req,res)=>{
     }
 
     if(errors.length > 0){
-        res.render('register',{
+        res.render('signup',{
             errors,
             name,
             email,
@@ -43,7 +43,7 @@ router.post('/register', (req,res)=>{
             //Check if the user already exists
             if(user){
                 errors.push({ msg:'Email is already registered' });
-                res.render('register',{
+                res.render('signup',{
                     errors,
                     name,
                     email,
@@ -68,7 +68,7 @@ router.post('/register', (req,res)=>{
                         addUser.save()
                         .then(user => {
                             req.flash('success_msg','You are now registered!!');
-                            res.redirect('/users/login');
+                            res.redirect('/users/signin');
                         })
                         .catch(err=>console.log(err));
 
@@ -87,25 +87,25 @@ router.get('/auth/facebook',
     passport.authenticate('facebook'));
 
 //Handle end user login 
-router.post('/login', (req,res, next) => {
+router.post('/signin', (req,res, next) => {
     passport.authenticate('local',{
         successRedirect: '/dashboard',
-        failureRedirect: '/users/login',
+        failureRedirect: '/users/signin',
         failureFlash: true
     })(req, res, next);
 });
 
 //Login Page
-router.get('/login',(req,res)=>res.render('login'));
+router.get('/signin',(req,res)=>res.render('signin'));
 
 //Register Page
-router.get('/register',(req,res)=>res.render('register'));
+router.get('/signup',(req,res)=>res.render('signup'));
 
 //Handle end user logout
 router.get('/logout',(req,res,next) => {
     req.logout();
     req.flash('success_msg','You are Logged out');
-    res.redirect('/users/login');
+    res.redirect('/users/signin');
 });
 
 module.exports=router;

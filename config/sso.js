@@ -8,7 +8,7 @@ const keys = require('./keys');
 const FacebookStrategy = require('passport-facebook').Strategy;
 
 //Load User Model
-const User = require('../domains/user');
+const User = require('../models/enduser');
 
 module.exports = function(passport) {
     passport.use(
@@ -46,8 +46,8 @@ module.exports = function(passport) {
             (accessToken, refreshToken, profile, done) => {
                 
                 const name=profile.displayName;
-                const accessToken = accessToken;
-                const refreshToken = refreshToken;
+                const token = accessToken;
+                const rtoken = refreshToken;
                 const email='xyz@gmail.com';
                 const password=a1b2c3;
                 const newUser = new EndUser({

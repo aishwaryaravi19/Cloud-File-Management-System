@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const AWS = require("aws-sdk");
 const keys = require("../config/keys");
-const Files = require('../domains/files');
+const Files = require('../models/file');
 
 router.post('/', (req, res) => {
 
@@ -17,17 +17,15 @@ router.post('/', (req, res) => {
         secretAccessKey: keys.AwsSecretAccessKey,
         region: keys.region
     });
+    const file = req.file;
 
     var params = {
-        Bucket: keys.bucketName,
-        Delete: {
-            Objects: [
-              {
-                Key: fileName 
-              },
-            ],
-          }
-    };
+      Bucket: keys.bucketName,
+      Key: file.fieldname+('-')+Date.now(),
+      Body: file.buffer,
+      ContentType: file.mimetype,
+      ACL: "public-read"
+  };
 
     s3BucketCredentials.putObject(params, function(err, data) {
         if (err) {
