@@ -45,7 +45,7 @@
           <th>Delete File</th>
       </tr>
     </thead>
-    <% var cf = 'http://d3i9r2ifyy8coc.cloudfront.net/'%>
+    <% var cf = 'http://d31ztirma5ul6c.cloudfront.net/'%>
     <tbody>
         <% data.forEach(function (data) { %>
           <form action="/delete" method="POST">
@@ -54,7 +54,7 @@
                   <td name='fileName'><%= data.fileName %></td>
                   <td name='uploadTime'><%= data.uploadTime %></td>
                   <td name='fileUrl'><a href='<%=cf + data.cloudfrontKey %>'><%= data.fileUrl %></a></td>
-                  <td><button class='btn' name='<%= data.fileUrl %>' data-toggle="modal" data-target="#exampleModalCenter">Edit</button></td>
+                  <td><button class='btn' name='edit' type='button' data-toggle="modal" data-target="#exampleModalCenter">Edit</button></td>
                   <td><button class='btn' name=<%= data.fileUrl %>>Delete</button></td>
             </tr>
           </form>
@@ -100,7 +100,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="/upload" method="POST" enctype="multipart/form-data">
+      <form action="/edit" method="POST" enctype="multipart/form-data">
         <div class="file-field input-field">
           <div class="btn green">
             <span>File</span>
@@ -113,10 +113,6 @@
         </div>
         <button type="submit" class="btn">Update</button>
       </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" style="margin-right: 3px;"  class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick = "callApi()">Save changes</button>
       </div>
     </div>
   </div>

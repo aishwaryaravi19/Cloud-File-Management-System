@@ -48,7 +48,6 @@ router.post('/', (req, res) => {
       };
 
       s3BucketCredentials.upload(params, function (err, data) {
-        var cnt = "";
 
         if (err) {
             res.status(500).json({error: true, Message: err});
@@ -67,6 +66,7 @@ router.post('/', (req, res) => {
               fileUrl:data.Location,
               fileName: file.originalname,
               fileDesc: file.originalname,
+              cloudfrontKey: data.key,
               uploadTime: ((endDate - startDate) / 1000),
               modifiedDate: ((endDate - startDate) / 1000)
           });
@@ -83,9 +83,7 @@ router.post('/', (req, res) => {
 
         }
     });
-
     }
-  
   });
 });
 
